@@ -62,8 +62,8 @@ x_train = x_train[y_train.flatten() == 6]
 x_train = x_train.reshape(
     (x_train.shape[0],) +
     (height, width, channels)).astype('float32') / 255.
-iterations = 10000
-batch_size = 20
+iterations = 100000
+batch_size = 40
 save_dir = 'imgDir'
 start = 0
 for step in range(iterations):
