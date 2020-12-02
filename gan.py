@@ -50,11 +50,11 @@ discriminator.compile(optimizer=discriminator_optimizer,
 
 discriminator.trainable = False
 gan_input = keras.Input(shape=(latent_dim,))
+print(gan_input)
 gan_output = discriminator(generator(gan_input))
 gan = keras.models.Model(gan_input, gan_output)
 gan_optimizer = keras.optimizers.RMSprop(lr=0.0004, clipvalue=1.0, decay=1e-8)
 gan.compile(optimizer=gan_optimizer, loss='binary_crossentropy')
-
 
 # from keras.preprocessing import image
 (x_train, y_train), (_, _) = keras.datasets.cifar10.load_data()
@@ -62,8 +62,8 @@ x_train = x_train[y_train.flatten() == 6]
 x_train = x_train.reshape(
     (x_train.shape[0],) +
     (height, width, channels)).astype('float32') / 255.
-iterations = 100000
-batch_size = 40
+iterations = 50000
+batch_size = 25
 save_dir = 'imgDir'
 start = 0
 for step in range(iterations):
@@ -83,6 +83,8 @@ for step in range(iterations):
     a_loss = gan.train_on_batch(random_latent_vectors,
                                 misleading_targets)
     start += batch_size
+    if start == 50000:
+        start = 0
     if start > len(x_train) - batch_size:
         start = 0
     if step % 100 == 0:
